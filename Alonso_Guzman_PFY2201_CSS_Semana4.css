@@ -1,0 +1,182 @@
+/* =====================================
+   Configuración general
+   ===================================== */
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #f3f5f8;
+    color: #1f2937;
+}
+
+.etiqueta {
+    margin-bottom: 6px;
+    color: #f59e0b;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+/* =====================================
+   Navbar
+   ===================================== */
+.navbar {
+    border-bottom: 3px solid #f59e0b;
+}
+
+.navbar-brand {
+    color: #f59e0b !important;
+}
+
+.nav-link {
+    color: #ffffff !important;
+    border-radius: 6px;
+}
+
+.nav-link:hover,
+.nav-link:focus-visible {
+    color: #111827 !important;
+    background-color: #f59e0b;
+}
+
+/* =====================================
+   Encabezado
+   ===================================== */
+.encabezado {
+    background-color: #17212f;
+    color: #ffffff;
+    border-bottom: 4px solid #f59e0b;
+}
+
+.texto-presentacion {
+    max-width: 750px;
+    color: #e5e7eb;
+}
+
+/* =====================================
+   Carrusel
+   ===================================== */
+.slide-juego {
+    min-height: 380px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: #ffffff;
+}
+
+.slide-terraria {
+    background-color: #17212f;
+}
+
+.slide-stardew {
+    background-color: #78350f;
+}
+
+.slide-halo {
+    background-color: #1e3a5f;
+}
+
+.contenido-slide {
+    padding: 30px;
+}
+
+.icono-juego {
+    margin-bottom: 15px;
+    font-size: 5rem;
+}
+
+.contenido-slide h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+}
+
+/* =====================================
+   Cards de productos
+   ===================================== */
+.card {
+    border: 1px solid #d1d5db;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 22px rgba(17, 24, 39, 0.15) !important;
+}
+
+.card-title {
+    color: #92400e;
+    font-weight: 700;
+}
+
+.imagen-producto {
+    height: 220px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #17212f;
+    border-bottom: 4px solid #f59e0b;
+}
+
+.imagen-producto--stardew {
+    background-color: #78350f;
+}
+
+.imagen-producto--halo {
+    background-color: #1e3a5f;
+}
+
+.imagen-producto span {
+    font-size: 5rem;
+}
+
+/* =====================================
+   Botones
+   ===================================== */
+.btn-dark {
+    border: 2px solid #17212f;
+    background-color: #17212f;
+}
+
+.btn-dark:hover,
+.btn-dark:focus-visible {
+    border-color: #f59e0b;
+    background-color: #f59e0b;
+    color: #111827;
+}
+
+/* =====================================
+   Sección Nosotros
+   ===================================== */
+.seccion-nosotros {
+    background-color: #ffffff;
+    border-top: 1px solid #d1d5db;
+}
+
+/* =====================================
+   Footer
+   ===================================== */
+footer {
+    border-top: 4px solid #f59e0b;
+}
+
+/* =====================================
+   Ajustes responsivos adicionales
+   ===================================== */
+@media (max-width: 768px) {
+    .slide-juego {
+        min-height: 300px;
+    }
+
+    .icono-juego,
+    .imagen-producto span {
+        font-size: 4rem;
+    }
+
+    .contenido-slide h2 {
+        font-size: 2rem;
+    }
+}

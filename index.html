@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="The Storex, tienda de videojuegos con títulos de aventura, simulación y acción.">
+    <title>The Storex - Tienda de Videojuegos</title>
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- CSS personalizado -->
+    <link rel="stylesheet" href="Alonso_Guzman_PFY2201_CSS_Semana4.css">
+</head>
+<body>
+
+    <!-- Barra de navegación responsiva con Bootstrap -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top" aria-label="Navegación principal">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="#inicio">The Storex</a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#menuPrincipal" aria-controls="menuPrincipal"
+                aria-expanded="false" aria-label="Mostrar menú de navegación">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="menuPrincipal">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="#inicio">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#productos">Productos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#nosotros">Nosotros</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contacto">Contacto</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Encabezado principal -->
+    <header id="inicio" class="encabezado">
+        <div class="container text-center py-5">
+            <p class="etiqueta">Tienda de videojuegos</p>
+            <h1 class="display-4 fw-bold">The Storex</h1>
+            <p class="lead mx-auto texto-presentacion">
+                Bienvenido a The Storex. Aquí encontrarás títulos de aventura,
+                simulación y acción para disfrutar en tu tiempo libre.
+            </p>
+        </div>
+    </header>
+
+    <!-- Carrusel Bootstrap: cambio automático cada 3 segundos -->
+    <section class="container my-5" aria-label="Videojuegos destacados">
+        <div id="carruselJuegos" class="carousel slide shadow" data-bs-ride="carousel" data-bs-interval="3000">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#carruselJuegos" data-bs-slide-to="0"
+                    class="active" aria-current="true" aria-label="Terraria"></button>
+                <button type="button" data-bs-target="#carruselJuegos" data-bs-slide-to="1"
+                    aria-label="Stardew Valley"></button>
+                <button type="button" data-bs-target="#carruselJuegos" data-bs-slide-to="2"
+                    aria-label="Halo"></button>
+            </div>
+
+            <div class="carousel-inner rounded">
+                <div class="carousel-item active">
+                    <div class="slide-juego slide-terraria">
+                        <div class="contenido-slide">
+                            <div class="icono-juego" aria-hidden="true">⛏️</div>
+                            <h2>Terraria</h2>
+                            <p>Aventura, exploración y construcción.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="carousel-item">
+                    <div class="slide-juego slide-stardew">
+                        <div class="contenido-slide">
+                            <div class="icono-juego" aria-hidden="true">🌾</div>
+                            <h2>Stardew Valley</h2>
+                            <p>Cultiva, explora y crea tu propia granja.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="carousel-item">
+                    <div class="slide-juego slide-halo">
+                        <div class="contenido-slide">
+                            <div class="icono-juego" aria-hidden="true">🚀</div>
+                            <h2>Halo</h2>
+                            <p>Acción y ciencia ficción.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="carousel-control-prev" type="button" data-bs-target="#carruselJuegos" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Anterior</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carruselJuegos" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Siguiente</span>
+            </button>
+        </div>
+    </section>
+
+    <main>
+        <!-- Catálogo usando Grid y Cards de Bootstrap -->
+        <section id="productos" class="container my-5">
+            <div class="text-center mb-4">
+                <p class="etiqueta">Catálogo</p>
+                <h2 class="fw-bold">Productos destacados</h2>
+                <p>Conoce algunos de los videojuegos disponibles en The Storex.</p>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-12 col-md-6 col-lg-4">
+                    <article class="card h-100 shadow-sm">
+                        <div class="imagen-producto" role="img" aria-label="Representación de Terraria">
+                            <span aria-hidden="true">⛏️</span>
+                        </div>
+                        <div class="card-body d-flex flex-column">
+                            <h3 class="card-title h4">Terraria</h3>
+                            <p class="card-text">
+                                Terraria es un videojuego de aventura, exploración y construcción
+                                donde puedes recorrer distintos lugares, recolectar recursos y combatir enemigos.
+                            </p>
+                            <a href="#contacto" class="btn btn-dark mt-auto">Consultar</a>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="col-12 col-md-6 col-lg-4">
+                    <article class="card h-100 shadow-sm">
+                        <div class="imagen-producto imagen-producto--stardew" role="img" aria-label="Representación de Stardew Valley">
+                            <span aria-hidden="true">🌾</span>
+                        </div>
+                        <div class="card-body d-flex flex-column">
+                            <h3 class="card-title h4">Stardew Valley</h3>
+                            <p class="card-text">
+                                Stardew Valley es un videojuego de simulación donde puedes administrar
+                                una granja, cultivar, criar animales y relacionarte con los habitantes del pueblo.
+                            </p>
+                            <a href="#contacto" class="btn btn-dark mt-auto">Consultar</a>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="col-12 col-md-6 col-lg-4">
+                    <article class="card h-100 shadow-sm">
+                        <div class="imagen-producto imagen-producto--halo" role="img" aria-label="Representación de Halo">
+                            <span aria-hidden="true">🚀</span>
+                        </div>
+                        <div class="card-body d-flex flex-column">
+                            <h3 class="card-title h4">Halo</h3>
+                            <p class="card-text">
+                                Halo es una saga de videojuegos de acción y ciencia ficción ambientada
+                                en un conflicto futurista, con combates, exploración y diferentes desafíos.
+                            </p>
+                            <a href="#contacto" class="btn btn-dark mt-auto">Consultar</a>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección informativa con Grid de Bootstrap -->
+        <section id="nosotros" class="seccion-nosotros py-5">
+            <div class="container">
+                <div class="row align-items-center g-4">
+                    <div class="col-12 col-md-5">
+                        <p class="etiqueta">Sobre la tienda</p>
+                        <h2 class="fw-bold">Una tienda simple para jugadores</h2>
+                    </div>
+                    <div class="col-12 col-md-7">
+                        <p>
+                            The Storex es un proyecto académico de ecommerce básico. Su objetivo es presentar
+                            un catálogo claro, ordenado y adaptable a celulares, tablets y computadores.
+                        </p>
+                        <p class="mb-0">
+                            En esta versión se implementó Bootstrap 5 para mejorar la responsividad de la
+                            navegación, el carrusel, el catálogo y las distintas secciones del sitio web.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Pie de página -->
+    <footer id="contacto" class="bg-dark text-white py-4">
+        <div class="container">
+            <div class="row align-items-center g-4">
+                <div class="col-12 col-md-6">
+                    <h2 class="h4">Contacto</h2>
+                    <p class="mb-1">Correo: contacto@thestorex.cl</p>
+                    <p class="mb-0">Instagram: @thestorex</p>
+                </div>
+                <div class="col-12 col-md-6 text-md-end">
+                    <p class="mb-0">&copy; 2026 The Storex. Proyecto académico PFY2201.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Bootstrap Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,6 @@
+[
+  {"id":1,"nombre":"Terraria","categoria":"Acción","precio":8990,"imagen":"assets/img/terraria.svg","descripcion":"Explora, construye y combate enemigos en un mundo lleno de aventuras."},
+  {"id":2,"nombre":"Stardew Valley","categoria":"Simulación","precio":10990,"imagen":"assets/img/stardew.svg","descripcion":"Administra una granja, cultiva, cría animales y conoce a los habitantes del pueblo."},
+  {"id":3,"nombre":"Halo Infinite","categoria":"Acción","precio":19990,"imagen":"assets/img/halo.svg","descripcion":"Combates futuristas y exploración en una conocida saga de ciencia ficción."},
+  {"id":4,"nombre":"Cities Builder","categoria":"Simulación","precio":14990,"imagen":"assets/img/cities.svg","descripcion":"Diseña y administra una ciudad equilibrando servicios, crecimiento y recursos."}
+]

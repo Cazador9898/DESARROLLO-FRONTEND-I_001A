@@ -1,17 +1,80 @@
-html { scroll-behavior: smooth; }
-body { margin: 0; font-family: Arial, Helvetica, sans-serif; background: #f4f6f8; color: #1f2937; }
-.navbar { border-bottom: 3px solid #f59e0b; }
-.navbar-brand, .etiqueta { color: #f59e0b !important; }
-.encabezado { background: #17212f; color: #fff; border-bottom: 4px solid #f59e0b; }
-.texto-presentacion { max-width: 760px; color: #e5e7eb; }
-.etiqueta { margin-bottom: 6px; font-size: .85rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
-.card-producto { border: 1px solid #d1d5db; transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease; }
-.card-producto:hover { transform: translateY(-4px); box-shadow: 0 10px 24px rgba(0,0,0,.12); }
-.producto-seleccionado { border: 2px solid #198754; }
-.card-img-top { height: 210px; object-fit: cover; background: #17212f; }
-.precio-normal { color: #6b7280; font-size: .95rem; }
-.precio-oferta { color: #166534; font-size: 1.2rem; font-weight: 700; }
-.seccion-carrito { background: #fff; border-top: 1px solid #d1d5db; }
-.item-carrito { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: .8rem 0; border-bottom: 1px solid #e5e7eb; }
-footer { border-top: 4px solid #f59e0b; }
-@media (max-width: 576px) { .card-img-top { height: 180px; } .item-carrito { flex-direction: column; align-items: flex-start; } }
+:root {
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  color: #202a3b;
+  background-color: #f5f7fb;
+  --tinta: #101827;
+  --tinta-clara: #17243a;
+  --acento: #ffb938;
+  --acento-hover: #f5a91e;
+}
+
+html { scroll-behavior: smooth; scroll-padding-top: 88px; }
+body { margin: 0; min-width: 320px; background: #f5f7fb; color: #202a3b; }
+section[id], header[id] { scroll-margin-top: 88px; }
+button, input, textarea, select { font: inherit; }
+
+.navbar-storex { background: var(--tinta); border-bottom: 3px solid var(--acento); box-shadow: 0 8px 25px rgb(0 0 0 / 10%); }
+.navbar-brand { color: #fff !important; font-size: 1.32rem; letter-spacing: -.025em; }
+.marca-icono { color: var(--acento); margin-right: 2px; }
+.navbar-storex .nav-link { color: #d7dfef; font-weight: 550; }
+.navbar-storex .nav-link:hover, .navbar-storex .nav-link:focus-visible { color: var(--acento); }
+.btn-acento { background: var(--acento); border: 1px solid var(--acento); color: #1b2432; font-weight: 700; }
+.btn-acento:hover, .btn-acento:focus-visible { background: var(--acento-hover); border-color: var(--acento-hover); color: #171e28; }
+.btn-acento[aria-pressed="true"] { box-shadow: inset 0 0 0 1px #a87204; }
+
+.encabezado { background: radial-gradient(ellipse at 90% 15%, #30425e 0%, #17243a 38%, #101827 76%); color: #fff; border-bottom: 4px solid var(--acento); }
+.py-lg-6 { padding-top: 5rem !important; padding-bottom: 5rem !important; }
+.resalte { color: var(--acento); }
+.texto-presentacion { color: #dce3f0; max-width: 700px; }
+.etiqueta { color: #b4760c; margin-bottom: 7px; font-size: .84rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+.encabezado .etiqueta, .seccion-contacto .etiqueta { color: var(--acento); }
+.hero-panel { border-radius: 1.5rem; background: linear-gradient(135deg, #273955, #1c2b42); border: 1px solid #5e718e; box-shadow: 0 24px 55px rgb(0 0 0 / 20%); }
+.hero-estrella { width: 65px; height: 65px; display: grid; place-items: center; font-size: 2.3rem; background: #ffb93820; color: var(--acento); border-radius: 1rem; }
+.hero-overline { color: #f7c36b; letter-spacing: .1em; }
+.hero-sutil { color: #cfdae9; }
+.hero-panel hr { border-color: #9ea8ba; }
+
+.filtros-catalogo { background: #fff; border: 1px solid #e1e6ef; box-shadow: 0 9px 22px rgb(33 45 66 / 4%); }
+.filtros-catalogo .btn { min-height: 34px; }
+.card-producto { border: 1px solid #dce2ec; border-radius: 1rem; overflow: hidden; transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease; }
+.card-producto:hover { transform: translateY(-4px); box-shadow: 0 12px 28px rgb(29 42 62 / 13%) !important; }
+.card-producto.producto-seleccionado { border: 2px solid #208254; }
+.card-producto .card-body { padding: 1.3rem; }
+.card-producto .card-title { font-weight: 750; }
+.card-producto .card-text { color: #657084; font-size: .93rem; }
+.card-img-top { height: 200px; object-fit: cover; background: #1b283b; }
+.precio-normal { color: #697487; font-size: .88rem; }
+.precio-oferta { color: #166534; font-size: 1.2rem; font-weight: 800; }
+.seccion-carrito { background: #fff; border-top: 1px solid #e0e6ed; border-bottom: 1px solid #e0e6ed; }
+.item-carrito { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid #e5e9f0; }
+.item-carrito:last-child { border-bottom: 0; }
+.tarjeta-panel { border: 1px solid #e0e6ed; border-radius: 1rem; box-shadow: 0 8px 20px rgb(0 0 0 / 3%); }
+.seccion-administracion { background: #f5f7fb; }
+.lista-admin { max-height: 375px; overflow-y: auto; }
+.lista-admin .list-group-item { background: transparent; }
+
+.seccion-contacto { background: #17243a; color: #fff; }
+.contacto-subtitulo { color: #cbd7e8; font-size: 1.05rem; }
+.aviso-demo { color: #eff5ff; background: #ffffff12; border: 1px solid #ffffff2a; }
+.tarjeta-contacto { color: #202a3b; border: 0; border-radius: 1.2rem; }
+.tarjeta-contacto .form-control:focus, .tarjeta-panel .form-control:focus { border-color: #dc982a; box-shadow: 0 0 0 .2rem #ffb93833; }
+.footer-storex { background: #0e1523; border-top: 4px solid var(--acento); }
+.text-footer { color: #b7c1d2; }
+.enlace-inicio { color: #ffd17d; text-decoration: none; }
+.enlace-inicio:hover { text-decoration: underline; color: #fff; }
+
+@media (max-width: 991.98px) {
+  .py-lg-6 { padding-top: 3rem !important; padding-bottom: 3rem !important; }
+  .navbar-nav .nav-link { padding: .7rem 0; }
+}
+@media (max-width: 575.98px) {
+  .card-img-top { height: 190px; }
+  .item-carrito { flex-direction: column; align-items: stretch; }
+  .item-carrito > span:last-child { display: flex; align-items: center; justify-content: space-between; }
+  .encabezado h1 { font-size: 2.4rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .card-producto { transition: none; }
+  .card-producto:hover { transform: none; }
+}

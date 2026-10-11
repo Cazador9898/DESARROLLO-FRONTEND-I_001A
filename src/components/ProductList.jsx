@@ -1,16 +1,9 @@
-import ProductCard from "./ProductCard";
+import ProductCard from "./ProductCard.jsx";
 
-export default function ProductList({
-  productos,
-  onAgregar,
-  estaEnCarrito,
-  mostrarDescripciones,
-}) {
-  // Renderizado condicional cuando el filtro o búsqueda no encuentra productos.
+export default function ProductList({ productos, onAgregar, estaEnCarrito, mostrarDescripciones }) {
   if (productos.length === 0) {
-    return <div className="alert alert-info">No se encontraron productos.</div>;
+    return <div className="alert alert-info" role="status">No se encontraron videojuegos. Prueba otra búsqueda o restaura el catálogo.</div>;
   }
-
   return (
     <div className="row g-4">
       {productos.map((producto) => (

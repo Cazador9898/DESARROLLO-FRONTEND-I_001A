@@ -1,212 +1,184 @@
 import { useEffect, useMemo, useState } from "react";
-import ProductList from "./components/ProductList";
-import Cart from "./components/Cart";
+import Navbar from "./components/Navbar.jsx";
+import CatalogFilters from "./components/CatalogFilters.jsx";
+import ProductList from "./components/ProductList.jsx";
+import Cart from "./components/Cart.jsx";
+import AdminPanel from "./components/AdminPanel.jsx";
+import ContactForm from "./components/ContactForm.jsx";
+import { filtrarProductos, obtenerCategorias } from "./utils/catalog.js";
+import { CLAVE_CARRITO, CLAVE_CATALOGO, guardarAlmacenamiento, leerAlmacenamiento } from "./utils/storage.js";
 
 export default function App() {
-  // Estados principales solicitados en la actividad: catálogo, carrito e interacción.
   const [productos, setProductos] = useState([]);
-  const [carrito, setCarrito] = useState([]);
+  const [originales, setOriginales] = useState([]);
+  const [catalogoListo, setCatalogoListo] = useState(false);
+  const [carrito, setCarrito] = useState(() => leerAlmacenamiento(CLAVE_CARRITO, []));
   const [busqueda, setBusqueda] = useState("");
   const [categoria, setCategoria] = useState("Todos");
   const [mostrarDescripciones, setMostrarDescripciones] = useState(true);
   const [cargando, setCargando] = useState(true);
   const [errorCarga, setErrorCarga] = useState("");
 
-  // useEffect simula una fuente externa leyendo un JSON local.
-  // BASE_URL hace que la ruta funcione tanto en local como en GitHub Pages.
+  // Archivo JSON servido desde /public. BASE_URL mantiene las rutas correctas
+  // tanto en localhost como bajo /NOMBRE-REPOSITORIO/ en GitHub Pages.
   useEffect(() => {
     const controller = new AbortController();
 
-    async function cargarProductos() {
+    async function cargarCatalogo() {
       try {
         setCargando(true);
         setErrorCarga("");
-
-        const respuesta = await fetch(`${import.meta.env.BASE_URL}data/productos.json`, {
-          signal: controller.signal,
-        });
-
-        if (!respuesta.ok) {
-          throw new Error("No fue posible cargar el catálogo.");
-        }
-
-        const datos = await respuesta.json();
-        setProductos(datos);
+        const respuesta = await fetch(`${import.meta.env.BASE_URL}data/productos.json`, { signal: controller.signal });
+        if (!respuesta.ok) throw new Error(`HTTP ${respuesta.status}`);
+        const iniciales = await respuesta.json();
+        if (!Array.isArray(iniciales)) throw new Error("El JSON no contiene un listado válido.");
+        if (controller.signal.aborted) return;
+        setOriginales(iniciales);
+        // Cambios del usuario guardados localmente. No altera el JSON del repositorio.
+        setProductos(leerAlmacenamiento(CLAVE_CATALOGO, iniciales));
+        setCatalogoListo(true);
       } catch (error) {
         if (error.name !== "AbortError") {
-          setErrorCarga("No se pudieron cargar los productos. Intenta nuevamente.");
+          setErrorCarga("No fue posible cargar el catálogo. Comprueba la conexión y vuelve a cargar.");
         }
       } finally {
-        if (!controller.signal.aborted) {
-          setCargando(false);
-        }
+        if (!controller.signal.aborted) setCargando(false);
       }
     }
 
-    cargarProductos();
+    cargarCatalogo();
     return () => controller.abort();
   }, []);
 
-  const categorias = useMemo(
-    () => ["Todos", ...new Set(productos.map((producto) => producto.categoria))],
-    [productos]
+  useEffect(() => {
+    if (catalogoListo) guardarAlmacenamiento(CLAVE_CATALOGO, productos);
+  }, [catalogoListo, productos]);
+
+  useEffect(() => {
+    guardarAlmacenamiento(CLAVE_CARRITO, carrito);
+  }, [carrito]);
+
+  const categorias = useMemo(() => obtenerCategorias(productos), [productos]);
+  const productosFiltrados = useMemo(
+    () => filtrarProductos(productos, busqueda, categoria),
+    [productos, busqueda, categoria]
   );
 
-  const productosFiltrados = useMemo(() => {
-    const texto = busqueda.trim().toLowerCase();
-
-    return productos.filter((producto) => {
-      const coincideTexto = producto.nombre.toLowerCase().includes(texto);
-      const coincideCategoria = categoria === "Todos" || producto.categoria === categoria;
-      return coincideTexto && coincideCategoria;
-    });
-  }, [productos, busqueda, categoria]);
+  useEffect(() => {
+    if (!categorias.includes(categoria)) setCategoria("Todos");
+  }, [categorias, categoria]);
 
   const cantidadCarrito = carrito.reduce((suma, item) => suma + item.cantidad, 0);
 
   function agregarAlCarrito(producto) {
     setCarrito((actual) => {
       const existe = actual.find((item) => item.id === producto.id);
-
-      if (existe) {
-        return actual.map((item) =>
-          item.id === producto.id ? { ...item, cantidad: item.cantidad + 1 } : item
-        );
-      }
-
-      return [...actual, { ...producto, cantidad: 1 }];
+      return existe
+        ? actual.map((item) => item.id === producto.id ? { ...item, cantidad: item.cantidad + 1 } : item)
+        : [...actual, { ...producto, cantidad: 1 }];
     });
   }
 
   function eliminarDelCarrito(id) {
-    setCarrito((actual) =>
-      actual.flatMap((item) => {
-        if (item.id !== id) return [item];
-        if (item.cantidad > 1) return [{ ...item, cantidad: item.cantidad - 1 }];
-        return [];
-      })
-    );
+    setCarrito((actual) => actual.flatMap((item) => {
+      if (item.id !== id) return [item];
+      return item.cantidad > 1 ? [{ ...item, cantidad: item.cantidad - 1 }] : [];
+    }));
   }
 
-  function productoEnCarrito(id) {
-    return carrito.some((item) => item.id === id);
+  function agregarAlCatalogo(nuevo) {
+    setProductos((actual) => [...actual, nuevo]);
+    setBusqueda("");
+    setCategoria("Todos");
+  }
+
+  function eliminarDelCatalogo(id) {
+    setProductos((actual) => actual.filter((producto) => producto.id !== id));
+    // Evita que el carrito conserve juegos eliminados del catálogo.
+    setCarrito((actual) => actual.filter((producto) => producto.id !== id));
+  }
+
+  function restaurarCatalogo() {
+    setProductos([...originales]);
+    setCarrito((actual) => actual.filter((item) => originales.some((producto) => producto.id === item.id)));
+    setBusqueda("");
+    setCategoria("Todos");
   }
 
   return (
     <>
-      <nav className="navbar navbar-dark bg-dark sticky-top">
-        <div className="container">
-          <a className="navbar-brand fw-bold" href="#inicio">
-            The Storex
-          </a>
+      <Navbar cantidadCarrito={cantidadCarrito} />
 
-          <div className="d-flex gap-2 align-items-center flex-wrap justify-content-end">
-            {categorias.map((cat) => (
-              <button
-                key={cat}
-                type="button"
-                className={`btn btn-sm ${categoria === cat ? "btn-warning" : "btn-outline-light"}`}
-                onClick={() => setCategoria(cat)}
-              >
-                {cat}
-              </button>
-            ))}
-
-            <a className="btn btn-warning" href="#carrito">
-              Carrito <span className="badge text-bg-dark">{cantidadCarrito}</span>
-            </a>
+      <header id="inicio" className="encabezado">
+        <div className="container py-5 py-lg-6">
+          <div className="row align-items-center g-4">
+            <div className="col-12 col-lg-7">
+              <p className="etiqueta mb-3">Tu próximo juego está aquí</p>
+              <h1 className="display-4 fw-bold lh-sm mb-3">Un universo de juegos, <span className="resalte">un solo lugar.</span></h1>
+              <p className="lead texto-presentacion mb-4">Explora nuestro catálogo, encuentra tu género favorito y agrega tus títulos preferidos al carrito.</p>
+              <div className="d-flex flex-wrap gap-3">
+                <a href="#productos" className="btn btn-acento btn-lg">Explorar catálogo</a>
+                <a href="#contacto" className="btn btn-outline-light btn-lg">Contáctanos</a>
+              </div>
+            </div>
+            <div className="col-12 col-lg-5">
+              <div className="hero-panel p-4 p-md-5" aria-label="Resumen de la tienda">
+                <div className="hero-estrella mb-3" aria-hidden="true">✦</div>
+                <p className="text-uppercase fw-semibold small hero-overline">The Storex / PFY2201</p>
+                <div className="display-5 fw-bold">{productos.length}</div>
+                <p className="mb-3 hero-sutil">Videojuegos en el catálogo</p>
+                <hr />
+                <p className="mb-0 hero-sutil">Búsqueda instantánea · Categorías · Carrito dinámico</p>
+              </div>
+            </div>
           </div>
-        </div>
-      </nav>
-
-      <header id="inicio" className="encabezado py-5">
-        <div className="container text-center">
-          <p className="etiqueta">Tienda de videojuegos</p>
-          <h1 className="display-4 fw-bold">The Storex</h1>
-          <p className="lead mx-auto texto-presentacion">
-            eCommerce interactivo construido con React, useState, useEffect y renderizado condicional.
-          </p>
         </div>
       </header>
 
       <main>
-        <section className="container py-5">
-          <div className="row justify-content-center">
-            <div className="col-12 col-lg-8">
-              <h2 className="h4 text-center mb-3">Buscar videojuegos</h2>
-              <label className="visually-hidden" htmlFor="textoBusqueda">
-                Buscar producto
-              </label>
-              <input
-                id="textoBusqueda"
-                className="form-control"
-                type="search"
-                value={busqueda}
-                onChange={(evento) => setBusqueda(evento.target.value)}
-                placeholder="Ejemplo: Terraria"
-              />
-
-              {busqueda && (
-                <p className="text-center mt-2 mb-0" aria-live="polite">
-                  {productosFiltrados.length > 0
-                    ? `Se encontraron ${productosFiltrados.length} producto(s).`
-                    : "No se encontraron coincidencias."}
-                </p>
-              )}
-            </div>
-          </div>
-        </section>
-
-        <section id="productos" className="container pb-5">
+        <section id="productos" className="container py-5" aria-labelledby="tituloProductos">
           <div className="d-flex flex-column flex-md-row align-items-md-end justify-content-between gap-3 mb-4">
             <div>
-              <p className="etiqueta">Catálogo React</p>
-              <h2 className="fw-bold mb-1">Productos</h2>
-              <p className="text-muted mb-0">Categoría seleccionada: {categoria}</p>
+              <p className="etiqueta">Catálogo interactivo</p>
+              <h2 id="tituloProductos" className="fw-bold mb-1">Videojuegos disponibles</h2>
+              <p className="text-muted mb-0">Descubre lo que tenemos para ti.</p>
             </div>
-
-            <button
-              type="button"
-              className="btn btn-outline-dark"
-              onClick={() => setMostrarDescripciones((valorActual) => !valorActual)}
-            >
+            <button type="button" className="btn btn-outline-dark align-self-start" onClick={() => setMostrarDescripciones((valor) => !valor)}>
               {mostrarDescripciones ? "Ocultar descripciones" : "Mostrar descripciones"}
             </button>
           </div>
 
-          {cargando && (
-            <div className="alert alert-secondary" role="status">
-              Cargando productos desde el archivo JSON...
-            </div>
-          )}
+          <CatalogFilters
+            busqueda={busqueda}
+            onBusqueda={setBusqueda}
+            categoria={categoria}
+            onCategoria={setCategoria}
+            categorias={categorias}
+            cantidad={productosFiltrados.length}
+          />
 
-          {!cargando && errorCarga && (
-            <div className="alert alert-danger" role="alert">
-              {errorCarga}
-            </div>
-          )}
-
+          {cargando && <div className="alert alert-secondary" role="status">Cargando videojuegos desde el archivo JSON...</div>}
+          {!cargando && errorCarga && <div className="alert alert-danger" role="alert">{errorCarga}</div>}
           {!cargando && !errorCarga && (
             <ProductList
               productos={productosFiltrados}
               onAgregar={agregarAlCarrito}
-              estaEnCarrito={productoEnCarrito}
+              estaEnCarrito={(id) => carrito.some((item) => item.id === id)}
               mostrarDescripciones={mostrarDescripciones}
             />
           )}
         </section>
 
-        <Cart
-          carrito={carrito}
-          onEliminar={eliminarDelCarrito}
-          onVaciar={() => setCarrito([])}
-        />
+        <Cart carrito={carrito} onEliminar={eliminarDelCarrito} onVaciar={() => setCarrito([])} />
+        <AdminPanel productos={productos} onAgregar={agregarAlCatalogo} onEliminar={eliminarDelCatalogo} onRestaurar={restaurarCatalogo} />
+        <ContactForm />
       </main>
 
-      <footer className="bg-dark text-white py-4">
-        <div className="container text-center">
-          <p className="mb-1 fw-bold">The Storex</p>
-          <p className="mb-0">Proyecto PFY2201 - Semana 8</p>
+      <footer className="footer-storex text-white py-4">
+        <div className="container d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2">
+          <span className="fw-bold">✦ The Storex</span>
+          <span className="small text-footer">Proyecto académico · Desarrollo Frontend I · PFY2201 · Evaluación final</span>
+          <a href="#inicio" className="enlace-inicio small">Volver arriba ↑</a>
         </div>
       </footer>
     </>
